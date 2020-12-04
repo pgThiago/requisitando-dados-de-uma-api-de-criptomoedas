@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>CoinMarketCap</title>
+</head>
+<body>
+
+    <div id="coins"></div>
+
+    <script type="text/javascript">
+        var apiKey = {
+            key: `API KEY`
+        }
+
+        fetch(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/map?CMC_PRO_API_KEY=${apiKey.key}`)
+            .then((response) => {
+                if(!response.ok) throw new Error(`Erro ao executar a requisição, status ${response.status}`);
+                return response.json();
+            })
+            .then((api) => {
+                console.log(api)
+                var texto = "";
+                for(let i = 0; i < 10; i++){
+                    texto = texto + `
+                        <div class="media">
+                            <img src="https://media.istockphoto.com/photos/bitcoin-on-a-led-technological-light-surface-picture-id879153690?b=1&k=6&m=879153690&s=170x170&h=oiBPOtVxoUaEmpcMOXMKSfSWG2XarHbeCzFX9msEe70=" class="self-center mr-3" alt="coin" width="100" height="60">
+                            <div class="media-body">
+                                <h5>Name: ${api.data[i].name}</h5>
+                                <h5>Symbol: ${api.data[i].symbol}</h5>
+                                <h5>First historical data: ${api.data[i].first_historical_data}</h5>
+                            </div>
+                        </div>
+                    `;
+
+                    document.getElementById("coins").innerHTML = texto;
+
+                }
+            })
+            .catch((error) => {
+                console.error(error.message);
+            });
+    </script>
+</body>
+</html>
